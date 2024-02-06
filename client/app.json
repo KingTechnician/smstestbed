@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "plproject1",
-    "slug": "plproject1",
+    "name": "client",
+    "slug": "client",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
