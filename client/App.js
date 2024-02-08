@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import {useState} from 'react';
-import {Select,Grid,Table,TableBody,TableCell,TableContainer,TableHead,TablePagination,TableRow,Accordion,AccordionSummary,AccordionDetails,FormControl,TextField,InputLabel,MenuItem,Button,AppBar,Typography,Toolbar,Paper,Box} from '@mui/material'
+import {Select,Grid,Table,Pagination,Divider,TableBody,TableCell,TableContainer,TableHead,TablePagination,TableRow,Accordion,AccordionSummary,AccordionDetails,FormControl,TextField,InputLabel,MenuItem,Button,AppBar,Typography,Toolbar,Paper,Box} from '@mui/material'
 import {createTheme,ThemeProvider,styled} from '@mui/material/styles'
+import { AntDesign } from '@expo/vector-icons';
+
 
 export const themeOptions = {
   palette: {
@@ -75,34 +77,106 @@ export default function App() {
           <br></br>
           <Accordion sx={{backgroundColor:"#424242",color:"white"}}>
             <AccordionSummary
+              expandIcon={<AntDesign name="caretup" size={24} color="black" />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>Results Example</Typography>
+              <Typography variant="h3">Device Example</Typography>
+              <Divider sx={{backgroundColor:"blue"}}/>
             </AccordionSummary>
             <AccordionDetails> 
-            <TableContainer sx={{maxHeight:"20%"}}>
-                <Table stickyHeader aria-label="display-result">
-                  <TableHead>
-                    <TableRow sx={{backgroundColor:'primary.main','&.MuiTableCell-head':{color:'common.white'}}}> 
-                      <TableCell>Id</TableCell>
-                      <TableCell>First Name</TableCell>
-                      <TableCell>Last Name</TableCell>
-                      <TableCell>Email</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>1</TableCell>
-                      <TableCell>John</TableCell>
-                      <TableCell>Doe</TableCell>
-                      <TableCell>test@gmail.com</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <Grid container spacing ={2}>
+                <Grid item xs={6}>
+                  <Typography variant="h4">Events</Typography>
+                  <TableContainer sx={{backgroundColor:"#303030"}}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Timestamp</TableCell>
+                          <TableCell>Type</TableCell>
+                          <TableCell>Sub Type</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Id</TableCell>
+                          <TableCell>Sequence</TableCell>
+                          <TableCell>Value</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>2021-10-10</TableCell>
+                          <TableCell>Device</TableCell>
+                          <TableCell>Temperature</TableCell>
+                          <TableCell>Device 1</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>23.4</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="h4">Properties</Typography>
+                  <TableContainer sx={{backgroundColor:"#303030"}}>
+                  <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Timestamp</TableCell>
+                          <TableCell>Type</TableCell>
+                          <TableCell>Sub Type</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Id</TableCell>
+                          <TableCell>Sequence</TableCell>
+                          <TableCell>Value</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>2021-10-10</TableCell>
+                          <TableCell>Device</TableCell>
+                          <TableCell>Temperature</TableCell>
+                          <TableCell>Device 1</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>23.4</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="h4">Commands</Typography>
+                  <TableContainer sx={{backgroundColor:"#303030"}}>
+                  <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Timestamp</TableCell>
+                          <TableCell>Type</TableCell>
+                          <TableCell>Sub Type</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Id</TableCell>
+                          <TableCell>Sequence</TableCell>
+                          <TableCell>Value</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>2021-10-10</TableCell>
+                          <TableCell>Device</TableCell>
+                          <TableCell>Temperature</TableCell>
+                          <TableCell>Device 1</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>23.4</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>
+              </Grid>
             </AccordionDetails>
           </Accordion>
+          <Pagination count={10} variant="outlined" size="large"/>
         </Paper>
       </div>
     </ThemeProvider>
