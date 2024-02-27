@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Select,Grid,Table,Pagination,Divider,TableBody,TableCell,TableContainer,TableHead,TablePagination,TableRow,Accordion,AccordionSummary,AccordionDetails,FormControl,TextField,InputLabel,MenuItem,Button,AppBar,Typography,Toolbar,Paper,Box} from '@mui/material'
 import {createTheme,ThemeProvider,styled} from '@mui/material/styles'
 import { AntDesign } from '@expo/vector-icons';
@@ -22,7 +22,7 @@ export const themeOptions = {
       color:"white",
       backgroundColor:"blue"
     }
-  }
+  },
 };
 
 
@@ -36,6 +36,14 @@ export default function App() {
   const handleTypeChange = (event) =>{
     setType(event.target.value)
   }
+  React.useEffect(()=>
+  {
+    console.log("I'm over here.")
+    fetch("http://localhost:5000/data")
+    .then(response=>response.text())
+    .then(str=>console.log(str))
+
+  },[])
   return (
     <ThemeProvider theme={theme}>
       <div style={{width:"100%",backgroundColor:"#303030"}}>
