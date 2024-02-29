@@ -12,7 +12,7 @@ export const themeOptions = {
     mode:'dark',
     type: 'dark',
     primary: {
-      main: '#b73131',
+      main: '#2596be',
     },
     secondary: {
       main: '#f50057',
@@ -153,7 +153,7 @@ function SMSResults(devices) {
                           <Typography variant="h5">{key}</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                          <TableContainer sx={{ maxHeight: "500px", overflow: "auto", backgroundColor: "#303030" }}> 
+                          <TableContainer sx={{ maxHeight: "500px", overflow: "auto", backgroundColor: "#282828" }}> 
                             <Table stickyHeader>
                               <TableHead>
                                 <TableRow>
