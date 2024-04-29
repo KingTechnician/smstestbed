@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Select,Grid,Table,Pagination,Divider,TableBody,CircularProgress,TableCell,TableContainer,TableHead,TablePagination,TableRow,Accordion,AccordionSummary,AccordionDetails,FormControl,TextField,InputLabel,MenuItem,Button,AppBar,Typography,Toolbar,Paper,Box} from '@mui/material'
 import {createTheme,ThemeProvider,styled} from '@mui/material/styles'
 import { AntDesign } from '@expo/vector-icons';
@@ -28,43 +28,51 @@ export const themeOptions = {
 
 
 
-
 export default function App() {
-  const [search,setSearch] = useState("") //This determines the number of results to be displayed
-  const [devices,setDevices] = useState([])
-  const [type,setType] = useState(10) //Keyed by 10 for current and 20 for sample paths
-  const theme = createTheme(themeOptions) //Imported themes for dark mode
-  const [loading,setLoading] = useState(false)
-  const handleTypeChange = (event) =>{
-    setType(event.target.value)
-  }
-  
-  const fetchDevices = async() =>
-  {
-    setLoading(true)
-    setDevices([])
-    const queryPath = type===10?"current":"sample"
-    console.log(queryPath)
-    //Check if search is a number
-    var url = ""
-    if(isNaN(search))
-    {
-      const params = new URLSearchParams({category:queryPath,count:10})
-      url = `http://localhost:5000/data?${params.toString()}`
-    }
-    else
-    {
-      const params = new URLSearchParams({category:queryPath,count:search})
-      url = `http://localhost:5000/data?${params.toString()}`
-    }
+  const [search, setSearch] = useState("");
+  const [devices, setDevices] = useState([]);
+  const [type, setType] = useState(10);
+  const [baseUrl, setBaseUrl] = useState("https://smstestbed.nist.gov/vds");
+  const [loading, setLoading] = useState(false);
+  const theme = createTheme(themeOptions);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchDevices();
+    }, 5000); // Fetch devices every second
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, [search, type, baseUrl]); // Dependencies for useEffect
+
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
+
+  const handleBaseUrlChange = (event) => {
+    setBaseUrl(event.target.value);
+  };
+
+  const fetchDevices = async () => {
+    setLoading(true);
+    setDevices([]);
+    const queryPath = type === 10 ? "current" : "sample";
+    const params = new URLSearchParams({ baseUrl: baseUrl,category: queryPath, count: isNaN(search) ? 10 : search });
+    const url = `http://localhost:5000/data?${params.toString()}`;
     await fetch(url)
-    .then(response=>response.text())
-    .then(str=>{setDevices(JSON.parse(str))})
-    setLoading(false)
-  }
+      .then(response => response.json())
+      .then(data => {
+        setDevices(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Failed to fetch devices:", error);
+        setLoading(false);
+      });
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <div style={{width:"100%",backgroundColor:"#303030"}}>
+      <div style={{width: "100%", backgroundColor: "#303030"}}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h2" component="div">
@@ -72,45 +80,55 @@ export default function App() {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Paper sx={{backgroundColor:"#303030",height:"95%",overflow:"auto"}}>
-          <FormControl sx={{width:"100%"}} fullwidth>
-          <Select
-          sx={{width:"100%",input:{color:"white"}}} 
-          labelId="Data Selection Category" 
-          id="data-selection" 
-          value={type} 
-          onChange={handleTypeChange}
-          inputProps={{style:{color:'white'},input:{color:"white"}}}>
-            <MenuItem value={10}>Current</MenuItem>
-            <MenuItem value={20}>Sample</MenuItem>
-          </Select>
-          <br></br>
+        <Paper sx={{ margin: 2, padding: 2 }}>
+          <FormControl fullWidth style={{ marginBottom: 16 }}>
+            <TextField
+              fullWidth
+              label="Base URL"
+              variant="outlined"
+              value={baseUrl}
+              onChange={handleBaseUrlChange}
+              inputProps={{ style: { color: 'white' } }}
+              sx={{ input: { color: 'white' } }}
+            />
+          </FormControl>
+          <FormControl fullWidth style={{ marginBottom: 16 }}>
+            <Select
+              fullWidth
+              value={type}
+              onChange={handleTypeChange}
+              sx={{ input: { color: 'white' } }}
+            >
+              <MenuItem value={10}>Current</MenuItem>
+              <MenuItem value={20}>Sample</MenuItem>
+            </Select>
+          </FormControl>
           <Grid container spacing={2}>
             <Grid item xs={8}>
-              <TextField 
-              type="number"
-              sx={{width:"100%",input:{color:"white"}}} 
-              label="Number of Entries" 
-              value={search} 
-              onChange={(e)=>setSearch(e.target.value)}/>
+              <TextField
+                fullWidth
+                type="number"
+                label="Number of Entries"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                sx={{ input: { color: 'white' } }}
+              />
             </Grid>
             <Grid item xs={4}>
-              <Button onClick={fetchDevices} variant="contained" color="primary" fullWidth>
+              <Button variant="contained" color="primary" onClick={fetchDevices} fullWidth>
                 Search
               </Button>
             </Grid>
           </Grid>
-          </FormControl>
-          <br></br>
-          {devices.length===0 && loading?<CircularProgress color="primary"/>:<Typography variant="h5">{devices.length>0?"":"Play with the search bar to get started!"}</Typography>}
-          {SMSResults(devices)}
-          <br></br>
+          <Typography variant="h5" sx={{ color: 'white', marginTop: 2 }}>
+            {loading ? <CircularProgress color="primary" /> : devices.length > 0 ? "Data loaded" : "No data found"}
+            {SMSResults(devices)}
+          </Typography>
         </Paper>
       </div>
     </ThemeProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

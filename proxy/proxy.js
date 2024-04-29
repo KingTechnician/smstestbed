@@ -8,7 +8,7 @@ const xmldom = require('xmldom')
 
 const router = express.Router()
 
-const baseUrl = "https://smstestbed.nist.gov/vds"
+
 
 
 app.use(cors({
@@ -20,8 +20,11 @@ app.use(cors({
 app.get('/data',(req,res)=> //Request to get data from the smstestbed
 {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    var {count,category} = req.query
+    var {count,category,baseUrl} = req.query
     count = count || 10
+
+
+    if(!baseUrl) baseUrl = "https://smstestbed.nist.gov/vds";
     const url = `${baseUrl}/${category}?count=${count}`
     console.log(url)
     fetch(url)
